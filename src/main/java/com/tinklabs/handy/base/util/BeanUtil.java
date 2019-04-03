@@ -17,9 +17,9 @@ import com.alibaba.fastjson.TypeReference;
 public class BeanUtil {
 	
 	/**
-	 * 缓存KEY模式， entitytype_entityid
+	 * 缓存KEY模式， app:entitytype:entityid
 	 */
-	private static final String KEY_PATTERN = "{0}_{1}";
+	private static final String KEY_PATTERN = "{0}:{1}:{2}";
 
 	/**
 	 * @description: 将BEAN转成Map<String, String>，主要给redis hash用
@@ -57,9 +57,10 @@ public class BeanUtil {
 	 * @param id
 	 * @return
 	 */
-	public static String genKey(String type,String id){
+	public static String genKey(String appName,String type,String id){
 		if(StringUtils.isEmpty(type) || 
-				StringUtils.isEmpty(id)) {
+				StringUtils.isEmpty(id) ||
+					StringUtils.isEmpty(appName)) {
 			return null;
 		}
 		return MessageFormat.format(KEY_PATTERN, type,id);
