@@ -7,6 +7,7 @@ import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.tinklabs.handy.base.context.AppHolder;
 
 /**
  * @description: BEAN 工具类
@@ -53,6 +54,7 @@ public class BeanUtil {
 	 * @company: tinklabs
 	 * @author: pengtao
 	 * @date: 2019 2019年4月3日 下午2:56:36
+	 * @param appName
 	 * @param type
 	 * @param id
 	 * @return
@@ -63,7 +65,24 @@ public class BeanUtil {
 					StringUtils.isEmpty(appName)) {
 			return null;
 		}
-		return MessageFormat.format(KEY_PATTERN, type,id);
+		return MessageFormat.format(KEY_PATTERN, appName,type,id);
+	}
+	
+	/**
+	 * @description: 生成缓存KEY
+	 * @company: tinklabs
+	 * @author: pengtao
+	 * @date: 2019 2019年4月3日 下午2:56:36
+	 * @param type
+	 * @param id
+	 * @return
+	 */
+	public static String genKey(String type,String id){
+		if(StringUtils.isEmpty(type) || 
+				StringUtils.isEmpty(id)) {
+			return null;
+		}
+		return MessageFormat.format(KEY_PATTERN, AppHolder.getAppName(),type,id);
 	}
 	
 	
