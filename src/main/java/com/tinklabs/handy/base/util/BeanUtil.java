@@ -1,6 +1,9 @@
 package com.tinklabs.handy.base.util;
 
+import java.text.MessageFormat;
 import java.util.Map;
+
+import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
@@ -12,6 +15,11 @@ import com.alibaba.fastjson.TypeReference;
  * @date: 2019 2019年4月2日 下午3:56:08
  */
 public class BeanUtil {
+	
+	/**
+	 * 缓存KEY模式， entitytype_entityid
+	 */
+	private static final String KEY_PATTERN = "{0}_{1}";
 
 	/**
 	 * @description: 将BEAN转成Map<String, String>，主要给redis hash用
@@ -38,6 +46,23 @@ public class BeanUtil {
 	public static <T> T mapToBean(Map<String,Object> map,Class<T> c){
 		String jsonStr = JSONObject.toJSONString(map);
 		return JSONObject.parseObject(jsonStr,c);
+	}
+	
+	/**
+	 * @description: 生成缓存KEY
+	 * @company: tinklabs
+	 * @author: pengtao
+	 * @date: 2019 2019年4月3日 下午2:56:36
+	 * @param type
+	 * @param id
+	 * @return
+	 */
+	public static String genKey(String type,String id){
+		if(StringUtils.isEmpty(type) || 
+				StringUtils.isEmpty(id)) {
+			return null;
+		}
+		return MessageFormat.format(KEY_PATTERN, type,id);
 	}
 	
 	
