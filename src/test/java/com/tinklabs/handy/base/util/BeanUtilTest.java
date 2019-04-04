@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Map;
 
 import org.junit.Test;
+import org.springframework.beans.BeanUtils;
 
 import com.tinklabs.handy.base.cache.service.Device;
 import com.tinklabs.handy.base.cache.service.User;
@@ -15,6 +16,7 @@ public class BeanUtilTest {
 	public void testBeanToMap() {
 		Device d1 = initEntity();
 		Map<String, String> map = BeanUtil.beanToMap(d1);
+		System.out.println(map);
 		assertNotNull(map);
 		assertEquals(d1.getId()+"",map.get("id"));
 		assertEquals(d1.getD_user(),map.get("d_user"));
@@ -24,10 +26,12 @@ public class BeanUtilTest {
 	public void testBeanToMap2() {
 		Device d1 = initEntity();
 		User u = new User();
-		u.setId(123);
+		u.setId(123l);
 		u.setName("user");
 		d1.setD_user(u);
 		Map<String, String> map = BeanUtil.beanToMap(d1);
+		
+		System.out.println(map);
 		assertNotNull(map);
 		assertEquals(d1.getId()+"",map.get("id"));
 	}
@@ -44,7 +48,7 @@ public class BeanUtilTest {
 	
 	private Device initEntity() {
 		Device d1 = new Device();
-		d1.setId(1106292);
+		d1.setId(1106292l);
 		d1.setZone_id(2);
 		d1.setDevice_user_id(983581966);
 		d1.setBarcode("355655090313877");
@@ -76,5 +80,5 @@ public class BeanUtilTest {
 		
 		return d1;
 	}
-
+	
 }

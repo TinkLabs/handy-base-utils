@@ -79,7 +79,7 @@ public class EntityCacheServiceTest {
 	
 	private Device initEntity() {
 		Device d1 = new Device();
-		d1.setId(1106292);
+		d1.setId(1106292l);
 		d1.setZone_id(2);
 		d1.setDevice_user_id(983581966);
 		d1.setBarcode("355655090313877");

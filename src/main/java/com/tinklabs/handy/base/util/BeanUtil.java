@@ -1,13 +1,16 @@
 package com.tinklabs.handy.base.util;
 
+import java.lang.reflect.Method;
 import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.util.StringUtils;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.tinklabs.handy.base.context.AppHolder;
+
+import cn.hutool.core.bean.BeanDesc.PropDesc;
 
 /**
  * @description: BEAN 工具类
@@ -31,8 +34,38 @@ public class BeanUtil {
 	 * @return
 	 */
 	public static Map<String, String> beanToMap(Object bean){
-		String jsonStr = JSONObject.toJSONString(bean);
-		return JSONObject.parseObject(jsonStr, new TypeReference<Map<String,String>>(){});
+//		String jsonStr = JSONObject.toJSONString(bean);
+//		return JSONObject.parseObject(jsonStr, new TypeReference<Map<String,String>>(){});
+		
+		if (bean == null) {
+			return null;
+		}
+		Map<String, String> targetMap = new HashMap<>();
+		final Collection<PropDesc> props = cn.hutool.core.bean.BeanUtil.getBeanDesc(bean.getClass()).getProps();
+
+		String key;
+		Method getter;
+		Object value;
+		for (PropDesc prop : props) {
+			key = prop.getFieldName();
+			// 过滤class属性
+			// 得到property对应的getter方法
+			getter = prop.getGetter();
+			if (null != getter) {
+				// 只读取有getter方法的属性
+				try {
+					value = getter.invoke(bean);
+				} catch (Exception ignore) {
+					continue;
+				}
+				if (null != value && false == value.equals(bean)) {
+					if (null != key) {
+						targetMap.put(key, value.toString());
+					}
+				}
+			}
+		}
+		return targetMap;
 	}
 	
 	/**
@@ -44,9 +77,8 @@ public class BeanUtil {
 	 * @param c
 	 * @return
 	 */
-	public static <T> T mapToBean(Map<String,Object> map,Class<T> c){
-		String jsonStr = JSONObject.toJSONString(map);
-		return JSONObject.parseObject(jsonStr,c);
+	public static <T> T mapToBean(Map<Object,Object> map,Class<T> c){
+		return cn.hutool.core.bean.BeanUtil.mapToBean(map, c, false);
 	}
 	
 	/**
