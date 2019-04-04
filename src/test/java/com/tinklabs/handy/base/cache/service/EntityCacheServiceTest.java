@@ -17,7 +17,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.tinklabs.handy.base.TestApp;
-import com.tinklabs.handy.base.cache.service.EntityCacheService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TestApp.class)

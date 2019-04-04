@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import com.tinklabs.handy.base.util.BeanUtil;
+
 /**
  * @description: 实体数据缓存操作类，主要封装对实体的hash操作，以及后续的一级缓存扩展
  * @company: tinklabs
@@ -41,6 +43,18 @@ public class EntityCacheService {
 
 	public void delete(String entityKey) {
 		stringRedisTemplate.delete(entityKey);
+	}
+	
+	public <T> T execute(CacheCallback<T> action,Class<T> c,String key) {
+		
+		Map<Object, Object> map = getAll(key);
+		if (map != null && !map.isEmpty()) {
+			System.out.println("in cache........");
+			return BeanUtil.mapToBean(map, c);
+		}
+		T result = action.doSearch();
+		putAll(key, BeanUtil.beanToMap(result));
+		return result;
 	}
 
 }
