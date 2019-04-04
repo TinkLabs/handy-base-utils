@@ -6,7 +6,7 @@ package com.tinklabs.handy.base.exception;
  * @author: pengtao
  * @date: 2019 2019年3月31日 下午9:22:00
  */
-public class BusinessException extends Exception{
+public class BusinessException extends RuntimeException{
 
 	/**
 	* @fields
@@ -20,6 +20,11 @@ public class BusinessException extends Exception{
 	
 	public BusinessException(IError error) {
 		super(error.getMsg());
+		this.error = error;
+	}
+	
+	public BusinessException(IError error,String msg) {
+		super(msg);
 		this.error = error;
 	}
 	
