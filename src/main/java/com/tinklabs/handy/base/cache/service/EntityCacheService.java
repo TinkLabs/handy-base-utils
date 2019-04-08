@@ -29,12 +29,20 @@ public class EntityCacheService {
 		stringRedisTemplate.opsForHash().put(entityKey, fieldKey, value);
 	}
 	
+	public void setStringValue(String key, String value) {
+		stringRedisTemplate.opsForValue().set(key, value);
+	}
+	
 	public Map<Object, Object> getAll(String entityKey) {
 		return stringRedisTemplate.opsForHash().entries(entityKey);
 	}
 	
 	public Object get(String entityKey, String fieldKey) {
 		return stringRedisTemplate.opsForHash().get(entityKey, fieldKey);
+	}
+	
+	public Object getStringValue(String key) {
+		return stringRedisTemplate.opsForValue().get(key);
 	}
 	
 	public Set<Object> keys(String entityKey) {
