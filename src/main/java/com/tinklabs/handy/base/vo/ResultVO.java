@@ -11,7 +11,7 @@ import com.tinklabs.handy.base.exception.IError;
  * @author: pengtao
  * @date: 2019 2019年3月13日 下午7:38:50
  */
-public class ResultVO implements Serializable{
+public class ResultVO<T> implements Serializable{
 
 	/**
 	* @fields
@@ -29,18 +29,29 @@ public class ResultVO implements Serializable{
 	/**
 	 * 返回数据对象
 	 */
-	private Object data;
-	
+	private T data;
+
 	public static final ResultVO SUCCESS = new ResultVO(BaseErrors.SUCCESS,null);
-	
+
 	public ResultVO() {}
-	
-	
-	public ResultVO(IError error, Object data) {
+
+	public ResultVO(IError error) {
+		super();
+		this.code = error.getCode();
+		this.msg = error.getMsg();
+	}
+
+	public ResultVO(IError error, T data) {
 		super();
 		this.code = error.getCode();
 		this.msg = error.getMsg();
 		this.data = data;
+	}
+
+	public ResultVO(IError error, String msg) {
+		super();
+		this.code = error.getCode();
+		this.msg = msg;
 	}
 
 	/**
@@ -51,14 +62,14 @@ public class ResultVO implements Serializable{
 	 * @param data
 	 * @return
 	 */
-	public static ResultVO success(Object data) {
+	public static <T> ResultVO<T> success(T data) {
 		return new ResultVO(BaseErrors.SUCCESS,data);
 	}
-	
+
 	public static ResultVO fail(IError error) {
-		return new ResultVO(error,null);
+		return new ResultVO(error);
 	}
-	
+
 	public static ResultVO fail(IError error, String msg) {
 		return new ResultVO(error,msg);
 	}
@@ -71,13 +82,13 @@ public class ResultVO implements Serializable{
 		return msg;
 	}
 
-	public Object getData() {
+	public T getData() {
 		return data;
 	}
 
-	public void setData(Object data) {
+	public void setData(T data) {
 		this.data = data;
 	}
-	
-	
+
+
 }
