@@ -11,73 +11,72 @@ import com.tinklabs.handy.base.exception.IError;
  * @author: pengtao
  * @date: 2019 2019年3月13日 下午7:38:50
  */
-public class ResultVO implements Serializable{
+public class ResultVO<T> implements Serializable {
 
-	/**
-	* @fields
-	*/
-	private static final long serialVersionUID = 3315745598718701972L;
+    /**
+     * @fields
+     */
+    private static final long    serialVersionUID = 3315745598718701972L;
 
-	/**
-	 * 返回编码
-	 */
-	private String code;
-	/**
-	 * 返回消息
-	 */
-	private String msg;
-	/**
-	 * 返回数据对象
-	 */
-	private Object data;
-	
-	public static final ResultVO SUCCESS = new ResultVO(BaseErrors.SUCCESS,null);
-	
-	public ResultVO() {}
-	
-	
-	public ResultVO(IError error, Object data) {
-		super();
-		this.code = error.getCode();
-		this.msg = error.getMsg();
-		this.data = data;
-	}
+    /**
+     * 返回编码
+     */
+    private String               code;
+    /**
+     * 返回消息
+     */
+    private String               msg;
+    /**
+     * 返回数据对象
+     */
+    private T                    data;
 
-	/**
-	 * @description: 构建成功返回对象
-	 * @company: tinklabs
-	 * @author: pengtao
-	 * @date: 2019 2019年3月13日 下午7:43:48
-	 * @param data
-	 * @return
-	 */
-	public static ResultVO success(Object data) {
-		return new ResultVO(BaseErrors.SUCCESS,data);
-	}
-	
-	public static ResultVO fail(IError error) {
-		return new ResultVO(error,null);
-	}
-	
-	public static ResultVO fail(IError error, String msg) {
-		return new ResultVO(error,msg);
-	}
+    public static final ResultVO SUCCESS          = new ResultVO(BaseErrors.SUCCESS, null);
 
-	public String getCode() {
-		return code;
-	}
+    public ResultVO() {
+    }
 
-	public String getMsg() {
-		return msg;
-	}
+    public ResultVO(IError error, T data) {
+        super();
+        this.code = error.getCode();
+        this.msg = error.getMsg();
+        this.data = data;
+    }
 
-	public Object getData() {
-		return data;
-	}
+    /**
+     * @description: 构建成功返回对象
+     * @company: tinklabs
+     * @author: pengtao
+     * @date: 2019 2019年3月13日 下午7:43:48
+     * @param data
+     * @return
+     */
+    public static ResultVO success(Object data) {
+        return new ResultVO(BaseErrors.SUCCESS, data);
+    }
 
-	public void setData(Object data) {
-		this.data = data;
-	}
-	
-	
+    public static ResultVO fail(IError error) {
+        return new ResultVO(error, null);
+    }
+
+    public static ResultVO fail(IError error, String msg) {
+        return new ResultVO(error, msg);
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
 }

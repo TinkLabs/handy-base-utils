@@ -5,8 +5,10 @@ public enum BaseErrors implements IError {
 	SUCCESS("0","success"),
 	PARAMS_EMPTY("100001","parameter(s) can not be empty."),
 	UNKNOW_EXCEPTION("100002","unknowed exception."),
+	BUSINESS_EXCEPTION("10003", "business exception"),
 	SYSTEM_EXCEPTION("500","server internal error."),
 	AUTHENTICATION_EXCEPTION("403","no auth.");
+    
 	
 	private String code;
 	
