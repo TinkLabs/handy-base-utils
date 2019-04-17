@@ -1,9 +1,14 @@
 package com.tinklabs.handy.base.cache.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -73,8 +78,42 @@ public class EntityCacheService {
 			return BeanUtil.mapToBean(map, c);
 		}
 		T result = action.doSearch();
-		putAll(key, BeanUtil.beanToMap(result));
+		if(result!=null) {
+			putAll(key, BeanUtil.beanToMap(result));
+		}
 		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> List<T> getByRef(Class<T> c,String key,String valuePrefix) {
+		//根据关联关系的key查询关联关系id集合
+		Set<String> refKeys = getSetValus(key);
+		if (refKeys != null && !refKeys.isEmpty()) {
+			System.out.println("in cache........");
+			//如果不为空，以pipeline方式查询每一个关联key对应的hash对象
+			List<Object> result = stringRedisTemplate.executePipelined(new RedisCallback<Map<String,String>>() {
+
+				@Override
+				public Map<String,String> doInRedis(RedisConnection connection) throws DataAccessException {
+					refKeys.stream().forEach(k->{
+						connection.hGetAll(BeanUtil.genKey(valuePrefix, k).getBytes());
+					} );
+					return null;
+				}
+				
+			});
+			//遍历转换hash对象为业务对象类型
+			List<T> beanList = new ArrayList<T>();
+			result.stream().forEach(m->{
+				Map<Object,Object> map = (Map<Object,Object>)m;
+				T bean = BeanUtil.mapToBean(map, c);
+				beanList.add(bean);
+			});
+			//返回转换后的bean集合
+			return beanList;
+		}
+		//如果没有查到关联key，返回空
+		return null;
 	}
 
 }
