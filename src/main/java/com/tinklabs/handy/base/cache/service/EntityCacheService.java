@@ -53,6 +53,18 @@ public class EntityCacheService {
 		stringRedisTemplate.delete(entityKey);
 	}
 	
+	public Set<String> getSetValus(String key) {
+		return stringRedisTemplate.opsForSet().members(key);
+	}
+	
+	public void putSetValues(String key,String ... values) {
+		stringRedisTemplate.opsForSet().add(key, values);
+	}
+	
+	public void removeSetValue(String key,Object ... values) {
+		stringRedisTemplate.opsForSet().remove(key, values);
+	}
+	
 	public <T> T execute(CacheCallback<T> action,Class<T> c,String key) {
 		
 		Map<Object, Object> map = getAll(key);
