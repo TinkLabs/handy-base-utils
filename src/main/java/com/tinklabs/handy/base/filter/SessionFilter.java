@@ -35,13 +35,17 @@ public class SessionFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-        List<Cookie> cookies = Arrays.asList(req.getCookies());
-        if (cookies.size() > 0) {
-            Map<String, Object> tmp = new HashMap<>();
-            cookies.forEach(cookie -> {
-                tmp.put(cookie.getName(), cookie.getValue());
-            });
-            COOKIES.set(tmp);
+        if (req != null && req.getCookies() != null && req.getCookies().length > 0) {
+            List<Cookie> cookies = Arrays.asList(req.getCookies());
+            if (cookies.size() > 0) {
+                Map<String, Object> tmp = new HashMap<>();
+                cookies.forEach(cookie -> {
+                    if (cookie != null) {
+                        tmp.put(cookie.getName(), cookie.getValue());
+                    }
+                });
+                COOKIES.set(tmp);
+            }
         }
         chain.doFilter(request, response);
     }
