@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
 	
     @ExceptionHandler(value = AuthenticationException.class)
     public ResultVO authExceptionHandler(Exception e) throws Exception {
-    	logger.error("UNKNOW_EXCEPTION: " + e.getMessage());
+    	logger.error("UNKNOW_EXCEPTION: ",e);
         return ResultVO.fail(BaseErrors.AUTHENTICATION_EXCEPTION);
     }
 
