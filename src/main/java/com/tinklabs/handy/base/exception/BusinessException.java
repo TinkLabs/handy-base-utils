@@ -38,7 +38,7 @@ public class BusinessException extends RuntimeException{
 	}
 	
 	public String getMessage() {
-		return error.getMsg();
+		return super.getMessage();
 	}
 
 	public IError getError() {
