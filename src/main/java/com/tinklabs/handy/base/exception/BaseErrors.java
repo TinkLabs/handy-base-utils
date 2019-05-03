@@ -6,11 +6,9 @@ public enum BaseErrors implements IError {
 	PARAMS_EMPTY("100001","parameter(s) can not be empty."),
 	UNKNOW_EXCEPTION("100002","unknowed exception."),
 	BUSINESS_EXCEPTION("10003", "business exception"),
-	BAECODE_IS_NOT_EXIST("20000","barcode is not exist."),
-	BAECODE_ISILLEGAL("20001","barcode is isillegal."),
 	SYSTEM_EXCEPTION("500","server internal error."),
+	BAECODE_IS_NOT_EXIST("20000","barcode is not exist."),
 	AUTHENTICATION_EXCEPTION("403","no auth.");
-
 
 	private String code;
 
