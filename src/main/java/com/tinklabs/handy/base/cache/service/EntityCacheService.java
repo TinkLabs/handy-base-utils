@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -22,7 +23,7 @@ import com.tinklabs.handy.base.util.BeanUtil;
  */
 @Service
 public class EntityCacheService {
-	
+
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 
@@ -33,23 +34,27 @@ public class EntityCacheService {
 	public void put(String entityKey, String fieldKey, String value) {
 		stringRedisTemplate.opsForHash().put(entityKey, fieldKey, value);
 	}
-	
+
 	public void setStringValue(String key, String value) {
 		stringRedisTemplate.opsForValue().set(key, value);
 	}
-	
+
+	public void setStringValueExpires(String key, String value, Long time, TimeUnit timeUnit) {
+		stringRedisTemplate.opsForValue().set(key, value,time,timeUnit);
+	}
+
 	public Map<Object, Object> getAll(String entityKey) {
 		return stringRedisTemplate.opsForHash().entries(entityKey);
 	}
-	
+
 	public Object get(String entityKey, String fieldKey) {
 		return stringRedisTemplate.opsForHash().get(entityKey, fieldKey);
 	}
-	
+
 	public Object getStringValue(String key) {
 		return stringRedisTemplate.opsForValue().get(key);
 	}
-	
+
 	public Set<Object> keys(String entityKey) {
 		return stringRedisTemplate.opsForHash().keys(entityKey);
 	}
@@ -57,21 +62,21 @@ public class EntityCacheService {
 	public void delete(String entityKey) {
 		stringRedisTemplate.delete(entityKey);
 	}
-	
+
 	public Set<String> getSetValus(String key) {
 		return stringRedisTemplate.opsForSet().members(key);
 	}
-	
+
 	public void putSetValues(String key,String ... values) {
 		stringRedisTemplate.opsForSet().add(key, values);
 	}
-	
+
 	public void removeSetValue(String key,Object ... values) {
 		stringRedisTemplate.opsForSet().remove(key, values);
 	}
-	
+
 	public <T> T execute(CacheCallback<T> action,Class<T> c,String key) {
-		
+
 		Map<Object, Object> map = getAll(key);
 		if (map != null && !map.isEmpty()) {
 			System.out.println("in cache........");
@@ -83,7 +88,7 @@ public class EntityCacheService {
 		}
 		return result;
 	}
-	
+
 	public <T> List<T> getByRef(Class<T> c,String key,String valuePrefix) {
 		//根据关联关系的key查询关联关系id集合
 		Set<String> refKeys = getSetValus(key);
@@ -99,14 +104,14 @@ public class EntityCacheService {
 					} );
 					return null;
 				}
-				
+
 			});
 			return transferMapToBeanOfList(c, result);
 		}
 		//如果没有查到关联key，返回空
 		return null;
 	}
-	
+
 	public <T> List<T> getByIds(Class<T> c,List<String> ids,String keyPrefix) {
 		System.out.println("in cache........");
 		//如果不为空，以pipeline方式查询每一个关联key对应的hash对象
@@ -119,11 +124,11 @@ public class EntityCacheService {
 				} );
 				return null;
 			}
-			
+
 		});
 		return transferMapToBeanOfList(c, result);
 	}
-	
+
 	/**
 	 * @description: 转换Map集合为bean集合
 	 * @company: tinklabs
@@ -150,6 +155,6 @@ public class EntityCacheService {
 		}
 		return null;
 	}
-	
+
 
 }
