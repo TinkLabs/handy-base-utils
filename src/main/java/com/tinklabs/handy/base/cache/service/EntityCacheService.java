@@ -51,7 +51,7 @@ public class EntityCacheService {
 		return stringRedisTemplate.opsForHash().get(entityKey, fieldKey);
 	}
 
-	public Object getStringValue(String key) {
+	public String getStringValue(String key) {
 		return stringRedisTemplate.opsForValue().get(key);
 	}
 
