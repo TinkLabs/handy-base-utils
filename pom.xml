@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>com.tinklabs.handy</groupId>
 	<artifactId>handy-base-utils</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -80,12 +80,12 @@
 		<repository>
 			<id>nexus-tinklabs</id>
 			<name>tinklabs repository</name>
-			<url>https://nexus-backend.handy.travel/repository/maven-releases/</url>
+			<url>http://nexus-backend.handy.travel:8080/repository/maven-releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>nexus-tinklabs</id>
 			<name>Nexus tinklabs Repository</name>
-			<url>https://nexus-backend.handy.travel/repository/maven-snapshots/</url>
+			<url>http://nexus-backend.handy.travel:8080/repository/maven-snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 
